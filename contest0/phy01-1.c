@@ -13,7 +13,7 @@
 
 uint16_t satsum(uint16_t x, uint16_t y) {
 	if ((uint16_t)(x + y) < x) {
-		return (uint16_t)(-1);
+		return ~0;
 	}
 	return x + y;
 }
