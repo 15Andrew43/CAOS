@@ -1,7 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-
-
 typedef enum {
     PlusZero      = 0x00,
     MinusZero     = 0x01,
@@ -18,24 +15,69 @@ typedef enum {
 extern float_class_t
 classify(double *value_ptr);
 
-int main() {
+typedef union {
+    double value;
+    struct {
+       unsigned long long int mantissa : 52;
+       unsigned long long int exponent : 11;
+       unsigned long long int sign : 1;
+   } raw;
+} unFloat;
 
-	// У нас есть некоторое целое вещественное число, которое хранится в памяти
-double a = 3.14159;
 
-// Получаем указатель на это число
-double* a_ptr_as_double = &a;
+float_class_t classify(double *value_ptr) {
+    unFloat var;
+    var.value = *value_ptr;
+    if (!(var.raw.sign ^ 0)) {
+        if (!(var.raw.exponent ^ 0)) {
+            if (!(var.raw.mantissa ^ 0)) {
+                return PlusZero;
+            } else {
+                return PlusDenormal;
+            }
+        } else {
+            if (!(var.raw.exponent ^ 0x7FF)) {
+                if (!(var.raw.mantissa ^ 0)) {
+                    return PlusInf;
+                } else {
+                    if (!(var.raw.mantissa & 0x8000000000000)) {
+                        return SignalingNaN;
+                    } else {
+                        return QuietNaN;
+                    }
+                }
+            } else {
+                return PlusRegular;
+            }
+        }
+    } else {
+        if (!(var.raw.exponent ^ 0)) {
+            if (!(var.raw.mantissa ^ 0)) {
+                return MinusZero;
+            } else {
+                return MinusDenormal;
+            }
+        } else {
+            if (!(var.raw.exponent ^ 0x7FF)) {
+                if (!(var.raw.mantissa ^ 0)) {
+                    return MinusInf;
+                } else {
+                    if (!(var.raw.mantissa & 0x8000000000000)) {
+                        return SignalingNaN;
+                    } else {
+                        return QuietNaN;
+                    }
 
-// Теряем информацию о типе, приведением его к типу void*
-void* a_ptr_as_void = a_ptr_as_void;
+                }
+            } else {
+                return MinusRegular;
+            }
+        }
 
-// Указатель void* в языке Си можно присваивать любому указателю
-uint64_t* a_ptr_as_uint = a_ptr_as_void;
+    }
 
-// Ну а дальше просто разыменовываем указатель
-uint64_t b = *a_ptr_as_uint;
-	
-	printf("%f\n", b);
-
-	return 0;
 }
+
+// int main() {
+//     return 0;
+// }
