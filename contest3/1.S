@@ -31,7 +31,7 @@ printf_fmt_ptr:
 	.word printf_fmt
 
 printf_fmt:
-	.ascii "%d\n\0\0"
+	e "%d\n\0\0"
 
 
 scanf_fmt_ptr:
