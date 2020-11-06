@@ -8,6 +8,8 @@
 
 #include <stdio.h>
 
+#include <string.h>
+
 enum { 
     maxIntStrLen = 15
 };
@@ -30,7 +32,7 @@ main(int argc, char *argv[])
     while ((in_read=read(in, &value, sizeof(value)))>0) {
     	char curValStr[maxIntStrLen + 1] = "";
     	snprintf(curValStr, sizeof(curValStr), "%d ", value);
-        if (-1==write(1, curValStr, sizeof(curValStr))) {
+        if (-1==write(1, curValStr, strlen(curValStr))) {
                 exit_code = 2;
                 goto finally;
         }
