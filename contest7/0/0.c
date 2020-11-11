@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	memset(&max_tm, 0, sizeof(max_tm));
 	max_tm.tm_year = year - 1900;
 	max_tm.tm_mon = mon - 1;
-	max_tm.tm_mday = day + 1;
+	max_tm.tm_mday = day;
 	max_tm.tm_isdst = -1;
 	time_t max_time = mktime(&max_tm);
 	while ((entry=readdir(dir))) {
