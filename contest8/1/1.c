@@ -10,51 +10,50 @@
 
 #include <string.h>
 
-enum { 
-    maxIntStrLen = 15
-};
+
+#include <sys/mman.h>
+
+#include <stdlib.h>
+
 
 int
 main(int argc, char *argv[])
 {
 
-    int exit_code = 0;
     int in = open(argv[1], O_RDONLY);
-    if (-1==in) {
-        exit_code = 1;
-        goto finally;
+
+    struct stat st;
+    fstat(in, &st);
+    if (0==st.st_size) {
+        close(in);
+        exit(0);
     }
 
-    ssize_t in_read, out_d_read, out_o_read;
+    int *contents = mmap(NULL,
+                          st.st_size,
+						  PROT_READ,
+                          MAP_PRIVATE,
+                          in,
+                          0);
+
+    // printf("%d\n", *contents);
+    // printf("%d\n", *(contents+1));
+    // printf("%d\n", *(contents+2));
+    // printf("%d\n", *(contents+3));
+
     int value;
-    u_int32_t next_pointer;
-    
-    while ((in_read=read(in, &value, sizeof(value)))>0) {
-    	char curValStr[maxIntStrLen + 1] = "";
-    	snprintf(curValStr, sizeof(curValStr), "%d ", value);
-        if (-1==write(1, curValStr, strlen(curValStr))) {
-                exit_code = 2;
-                goto finally;
-        }
-        if ((in_read=read(in, &next_pointer, sizeof(next_pointer)))>0) {
-            if (next_pointer == 0) {
-                break;
-            }
-            if (-1==lseek(in, next_pointer, SEEK_SET)) {
-                exit_code = 3;
-                goto finally;
-            }
-        }
-        if (-1==in_read) {
-            exit_code = 2;
-            goto finally;
-        }        
+    u_int32_t next_pointer = 1;
+    int* ptr = contents;
+
+    while (next_pointer != 0) {
+    	value = *ptr;
+    	printf("%d\n", value);
+        next_pointer = *(ptr+1);
+        ptr = contents + next_pointer/sizeof(int);
     }
-    if (-1==in_read) {
-        exit_code = 2;
-        goto finally;
-    }
- finally:
+
+
     close(in);
-    return exit_code;
+    munmap(contents, st.st_size);
+    return 0;
 }

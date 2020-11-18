@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
         close(fd);
         exit(0);
     }
-    char *contents = mmap(NULL,
+    int *contents = mmap(NULL,
                           st.st_size,
                           PROT_READ,
                           MAP_PRIVATE,
