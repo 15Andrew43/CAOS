@@ -17,8 +17,9 @@ int main()
 	if (0==strnlen(buffer, sizeof(buffer))) {
 		return 0;
 	}
-	snprintf(program, sizeof(program), "expr = %s;\nprint(expr)", buffer);
-	execlp("python3", "python3", "-c", program, NULL);
+	
+	snprintf(program, sizeof(program), "#include <stdio.h>\n#include <stdlib.h>\n#include <unistd.h>\n#include <string.h>\nint main() {int res = %s;printf(\"%%d\n\", res);return 0;}", buffer);
+	execlp("gcc", "gcc", program, NULL);
 	perror("exec");
 	exit(1);
 }
