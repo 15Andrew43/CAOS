@@ -30,7 +30,6 @@ void RidOfDoubleSlash(char* path) {
 		}
 	}
 	path[++new_str_ind] = path[old_str_ind];
-	//printf("%s\n", path);
 }
 
 void FixRelativeSteps(char* path) {
@@ -41,33 +40,25 @@ void FixRelativeSteps(char* path) {
 	int slash_ind = -1;
 	while (path[old_str_ind]) {
 		if (path[old_str_ind] == '/') {
-			//printf("%s\n", "/");
 			slash_indexes[++slash_ind] = new_str_ind;
 			path[new_str_ind] = path[old_str_ind];
 			++old_str_ind;
 			++new_str_ind;
 		} else if (path[old_str_ind] == '.') {
-			//printf("%s\n", ".");
 			if (old_str_ind + 1 < len && path[old_str_ind+1] == '/') {
-				//printf("%s\n", "./");
-				// path[new_str_ind++] = '/';
-				// new_str_ind;
 				old_str_ind += 2;
-			} else if ((old_str_ind + 2 < len && path[old_str_ind+1] == '.' && path[old_str_ind+2] == '/')) { // "../"
-				//printf("%s\n", "../");
+			} else if ((old_str_ind + 2 < len && path[old_str_ind+1] == '.' 
+						&& path[old_str_ind+2] == '/')) { // "../"
 				new_str_ind = slash_indexes[--slash_ind] + 1;
 				old_str_ind += 3;
 			}
 		} else {
-			//printf("%s\n", "char");
 			path[new_str_ind] = path[old_str_ind];
 			++old_str_ind;
 			++new_str_ind;
 		}
 	}
 	path[new_str_ind] = path[old_str_ind];
-
-	// printf("%s\n", path);
 }
 
 extern void normalize_path(char* path) {
@@ -75,8 +66,8 @@ extern void normalize_path(char* path) {
 	FixRelativeSteps(path);
 }
 
-int main(int argc, char *argv[]) {
-	normalize_path(argv[1]);
-	printf("%s\n", argv[1]);
-	return 0;
-}
+// int main(int argc, char *argv[]) {
+// 	normalize_path(argv[1]);
+// 	printf("%s\n", argv[1]);
+// 	return 0;
+// }

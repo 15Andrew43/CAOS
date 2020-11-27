@@ -8,16 +8,16 @@
 #include <time.h>
 #include <string.h>
 
-int parseFromTo(const char* str, int from, int to) {
+int GetDigitFromLongStr(const char* str, int ind_from, int ind_to) {
 	int read_on = 0;
 	char str_number[5];
 	int ind = -1;
 	for (int i = 0; i < strlen(str); ++i) {
-		if (i == to) {
+		if (i == ind_to) {
 			read_on = 0;
 			break;
 		}
-		if (i == from) {
+		if (i == ind_from) {
 			read_on = 1;
 		}
 		if (read_on) {
@@ -30,12 +30,12 @@ int parseFromTo(const char* str, int from, int to) {
 
 void ReadDate(const char* date, struct tm* struct_time) {
 
-	int year = parseFromTo(date, 0, 4);
-	int mon = parseFromTo(date, 5, 7);
-	int day = parseFromTo(date, 8, 10);
+	int year = GetDigitFromLongStr(date, 0, 4);
+	int mon = GetDigitFromLongStr(date, 5, 7);
+	int day = GetDigitFromLongStr(date, 8, 10);
 
-	int hour = parseFromTo(date, 11, 13);
-	int mins = parseFromTo(date, 14, 16);
+	int hour = GetDigitFromLongStr(date, 11, 13);
+	int mins = GetDigitFromLongStr(date, 14, 16);
 
 	struct_time->tm_year = year - 1900;
 	struct_time->tm_mon = mon - 1;
