@@ -50,12 +50,7 @@ int main(int argc, char *argv[])
 {
 //	YYYY-MM-DD HH:mm 
 	char date[17];
-	int first_time = 1;
-	int year, new_year;
-	int mon, new_mon;
-	int day, new_day;
-	int hour, new_hour;
-	int mins, new_mins;
+
 	struct tm struct_time; 
 	struct tm struct_new_time;
 

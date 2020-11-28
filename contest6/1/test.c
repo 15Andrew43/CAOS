@@ -13,10 +13,9 @@ int main() {
         printf("Error opening file");
         exit(ERROR_FILE_OPEN);
     }
-    
     number = 1543;
     fwrite(&number, sizeof(int), 1, output);
-    number = 17;
+    number = 16;
     fwrite(&number, sizeof(int), 1, output);
 
     number = 179;
@@ -26,7 +25,7 @@ int main() {
 
     number = 2020;
     fwrite(&number, sizeof(int), 1, output);
-    number = 9;
+    number = 8;
     fwrite(&number, sizeof(int), 1, output);
 
     fclose(output);
