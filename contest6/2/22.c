@@ -14,19 +14,9 @@
 #define FALSE 0
 #define TRUE 1
 
-typedef long long bool;
+#define PATH_MAX 4096
 
-/*
-stat(pathname, &sb);
-           if ((sb.st_mode & S_IFMT) == S_IFREG) {
-               // Handle regular file 
-           }
-
-stat(pathname, &sb);
-           if (S_ISREG(sb.st_mode)) {
-               // Handle regular file 
-           }
-*/
+typedef int bool;
 
 enum { 
     maxlongStrLen = 30
@@ -37,9 +27,9 @@ main(int argc, char *argv[])
 {
     ssize_t in_read;
     int exit_code = 0;
-//    long long in;
+
     struct stat sb;
-    char pathname[4000];
+    char pathname[PATH_MAX];
 
     long long size = 0;
     char symbol;
@@ -50,7 +40,7 @@ main(int argc, char *argv[])
         ind = -1;
         pathname[0] = '\0';
         is_read = FALSE;
-        while ((in_read=read(0, &symbol, sizeof(symbol)))>0 ) {
+        while ((in_read = read(0, &symbol, sizeof(symbol))) > 0 ) {
             if (!is_read && ( symbol == '\n' || symbol == '\t')) {
                 continue;
             } else if (is_read && ( symbol == '\n' || symbol == '\t')) {
@@ -59,15 +49,13 @@ main(int argc, char *argv[])
         
             is_read = TRUE;
             pathname[++ind] = symbol;
-            pathname[ind+1] = '\0';
+            pathname[ind + 1] = '\0';
         }
 
-        if (-1==in_read) {
+        if (-1 == in_read) {
             exit_code = 1;
             return exit_code;
         }
-
-        //prlong longf(pathname);
         
 	if (strlen(pathname)) {
 		lstat(pathname, &sb);
@@ -77,13 +65,7 @@ main(int argc, char *argv[])
 		        }
 		    continue;
 		}
-	//	in = open(pathname, O_RDONLY);
-	//	if (-1==in) {
-	//	    exit_code = 2;
-	//	    return exit_code;
-	//	}
-	//	size += lseek(in, 0, SEEK_END);
-	//	close(in);
+	
 		size += sb.st_size;
         }
         if (in_read == 0) {

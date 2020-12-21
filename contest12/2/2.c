@@ -8,15 +8,19 @@
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
-	short port_num = strtol(argv[1], NULL, 10);
+	short port = strtol(argv[1], NULL, 10);
 	int sock = socket(AF_INET, SOCK_DGRAM, 0);
-	if (-1 == sock) { perror("socket"); abort(); }
+	if (-1 == sock) { 
+		perror("socket"); 
+		abort(); 
+	}
 	
 	struct sockaddr_in addr = {
 		.sin_family = AF_INET,
 		. sin_addr = inet_addr("127.0.0.1"),
-		.sin_port = htons(port_num)
+		.sin_port = htons(port)
 	};
+	
 	int send_num, recv_num;
 	while (scanf("%d", &send_num)>0) {
 		sendto(sock,

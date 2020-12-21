@@ -38,17 +38,19 @@ int main(int argc, char *argv[]) {
 		while (fgets(buffer, sizeof(buffer), stdin) > 0) {
 								
 			pos = strchr(buffer, ':');
-
-			if (pos) {
-				if (sscanf(pos, ":%d:%d", &line, &col) == 2) {
-					if (strstr(pos, "warning") && line != last_warning_line) {
-						last_warning_line = line;
-						++cnt_warnings;
-					} else if (strstr(pos, "error") && line != last_error_line) {
-						last_error_line = line;
-						++cnt_errors;
-					}
-				}
+			
+			if (!pos) {
+				continue;
+			}
+			if (sscanf(pos, ":%d:%d", &line, &col) != 2) {
+				continue;
+			}
+			if (strstr(pos, "warning") && line != last_warning_line) {
+				last_warning_line = line;
+				++cnt_warnings;
+			} else if (strstr(pos, "error") && line != last_error_line) {
+				last_error_line = line;
+				++cnt_errors;
 			}
 		}
 		printf("%d\n%d\n", cnt_errors, cnt_warnings);
